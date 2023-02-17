@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {useToken} from "../store/store";
 
 class Api {
     private readonly baseUrl: string;
@@ -11,13 +12,18 @@ class Api {
         this.registerUrl = this.baseUrl + "/register";
     }
 
-    authenticate(body?: any) {
-        axios.post(this.authUrl, body).then(successData => {
-            localStorage.setItem("token", successData.data.token);
+    async authenticate(body?: any) {
+        await axios.post(this.authUrl, body).then(successData => {
+            let token = successData.data.token;
+            console.log(token)
+            window.localStorage.setItem("token", token);
+            return token;
         }, error => {
             console.log(error);
+            return null;
         });
     }
+
     register(body?: any) {
         axios.post(this.registerUrl, body).then(successData => {
             console.log(successData);

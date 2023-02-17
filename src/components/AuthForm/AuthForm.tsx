@@ -1,8 +1,12 @@
 import {useForm} from "react-hook-form";
 import "./AuthForm.css";
 import Api from "../../service/api";
+import {useToken} from "../../store/store";
+import React, {Fragment, useEffect, useState} from "react";
+import {redirect, useNavigate} from "react-router-dom";
 
-const AuthForm = () => {
+// @ts-ignore
+const AuthForm = (): any => {
     const {
         register,
         formState: {errors, isValid},
@@ -11,17 +15,37 @@ const AuthForm = () => {
     } = useForm({
         mode: "onBlur"
     });
+    const [_token, _setToken] = useState(() => {
+        let token = window.localStorage.getItem("token");
+
+        function changeToken(token: string): void {
+            window.localStorage.setItem("token", token)
+        }
+
+        return [token, changeToken];
+    });
+    const [message, setMessage] = useState<String | undefined>(undefined);
+    const navigate = useNavigate();
 
     const onSubmit = (data: any) => {
         let api = new Api();
-        api.authenticate(data);
+        const token = api.authenticate(data);
+        if (token != null) navigate('/todos')
+        else {
+            setMessage("Неверные данные для ввода");
+        }
         reset()
     };
 
-    return (
-        <div className="App">
+    useEffect(() => {
+        if (_token[0] != null) navigate("/todos");
+    }, [_token]);
+
+    return (<div className="App">
             <h1>Авторизация</h1>
+
             <form onSubmit={handleSubmit(onSubmit)}>
+                {message != undefined ? <h2>{message}</h2> : ""}
                 <label>
                     Логин:
                     <input
@@ -31,8 +55,8 @@ const AuthForm = () => {
                                 value: 6,
                                 message: "Минимум 6 символов."
                             },
-                            maxLength:{
-                                value:32,
+                            maxLength: {
+                                value: 32,
                                 message: "Максимум 32 символа."
                             }
                         })}
@@ -50,8 +74,8 @@ const AuthForm = () => {
                                 value: 5,
                                 message: "Минимум 5 символов."
                             },
-                            maxLength:{
-                                value:32,
+                            maxLength: {
+                                value: 32,
                                 message: "Максимум 32 символа."
                             }
                         })}
