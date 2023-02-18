@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {useToken} from "../store/store";
 
 class Api {
@@ -12,21 +12,26 @@ class Api {
         this.registerUrl = this.baseUrl + "/register";
     }
 
+    extractToken(successData: any) {
+        let token = successData.data.token;
+        console.log(token)
+        window.localStorage.setItem("token", token);
+        return token;
+    }
+
     async authenticate(body?: any) {
+
         await axios.post(this.authUrl, body).then(successData => {
-            let token = successData.data.token;
-            console.log(token)
-            window.localStorage.setItem("token", token);
-            return token;
+            return this.extractToken(successData);
         }, error => {
             console.log(error);
             return null;
         });
     }
 
-    register(body?: any) {
-        axios.post(this.registerUrl, body).then(successData => {
-            console.log(successData);
+    async register(body?: any) {
+        await axios.post(this.registerUrl, body).then(successData => {
+            return this.extractToken(successData);
         }, error => {
             console.log(error);
         });

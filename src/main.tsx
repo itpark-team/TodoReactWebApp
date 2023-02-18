@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AuthForm from "./components/AuthForm/AuthForm";
-import RegisterForm from "./components/RegisterForm";
+import RegisterForm from "./components/AuthForm/RegisterForm";
 import UserSettings from "./components/UserSettings";
 import Todos from "./components/Todos";
 /*

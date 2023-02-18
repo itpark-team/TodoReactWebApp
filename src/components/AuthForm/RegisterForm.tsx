@@ -1,12 +1,11 @@
 import {useForm} from "react-hook-form";
 import "./AuthForm.css";
 import Api from "../../service/api";
-import {useToken} from "../../store/store";
-import React, {Fragment, useEffect, useState} from "react";
-import {Link, redirect, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 // @ts-ignore
-const AuthForm = (): any => {
+const RegisterForm = (): any => {
     const {
         register,
         formState: {errors, isValid},
@@ -29,7 +28,7 @@ const AuthForm = (): any => {
 
     const onSubmit = (data: any) => {
         let api = new Api();
-        const token = api.authenticate(data);
+        const token = api.register(data);
         if (token != null) navigate('/todos')
         else {
             setMessage("Неверные данные для ввода");
@@ -42,10 +41,26 @@ const AuthForm = (): any => {
     }, [_token]);
 
     return (<div className="App">
-            <h1>Авторизация</h1>
+            <h1>Регистрация</h1>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 {message != undefined ? <h2>{message}</h2> : ""}
+                <label>
+                    Имя:
+                    <input
+                        {...register("name", {
+                            required: "Поле имя обязательно к заполнению",
+                            minLength: {
+                                value: 6,
+                                message: "Минимум 6 символов."
+                            },
+                            maxLength: {
+                                value: 32,
+                                message: "Максимум 32 символа."
+                            }
+                        })}
+                    />
+                </label>
                 <label>
                     Логин:
                     <input
@@ -62,14 +77,28 @@ const AuthForm = (): any => {
                         })}
                     />
                 </label>
-                <div style={{height: 40}}>
-                    {errors?.firstName && <p>{"Error!"}</p>}
-                </div>
+
                 <label>
                     Пароль:
                     <input
                         {...register("password", {
-                            required: "Поле логин обязательно к заполнению",
+                            required: "Поле password обязательно к заполнению",
+                            minLength: {
+                                value: 5,
+                                message: "Минимум 5 символов."
+                            },
+                            maxLength: {
+                                value: 32,
+                                message: "Максимум 32 символа."
+                            }
+                        })}
+                    />
+                </label>
+                <label>
+                    Email:
+                    <input
+                        {...register("email", {
+                            required: "Поле email обязательно к заполнению",
                             minLength: {
                                 value: 5,
                                 message: "Минимум 5 символов."
@@ -86,9 +115,8 @@ const AuthForm = (): any => {
                 </div>
 
                 <input type="submit" disabled={!isValid}/>
-                <h2><Link to={"/register"}>Зарегистрироваться</Link></h2>
             </form>
         </div>
     );
 };
-export default AuthForm
+export default RegisterForm
