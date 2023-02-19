@@ -15,7 +15,7 @@ const RegisterForm = (): any => {
         mode: "onBlur"
     });
     const [_token, _setToken] = useState(() => {
-        let token = window.localStorage.getItem("token");
+        const token = window.localStorage.getItem("token");
 
         function changeToken(token: string): void {
             window.localStorage.setItem("token", token)

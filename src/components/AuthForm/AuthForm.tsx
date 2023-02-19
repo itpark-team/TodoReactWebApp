@@ -1,7 +1,6 @@
 import {useForm} from "react-hook-form";
 import "./AuthForm.css";
 import Api from "../../service/api";
-import {useToken} from "../../store/store";
 import React, {Fragment, useEffect, useState} from "react";
 import {Link, redirect, useNavigate} from "react-router-dom";
 
@@ -16,7 +15,7 @@ const AuthForm = (): any => {
         mode: "onBlur"
     });
     const [_token, _setToken] = useState(() => {
-        let token = window.localStorage.getItem("token");
+        const token = window.localStorage.getItem("token");
 
         function changeToken(token: string): void {
             window.localStorage.setItem("token", token)
@@ -28,7 +27,7 @@ const AuthForm = (): any => {
     const navigate = useNavigate();
 
     const onSubmit = (data: any) => {
-        let api = new Api();
+        const api = new Api();
         const token = api.authenticate(data);
         if (token != null) navigate('/todos')
         else {
