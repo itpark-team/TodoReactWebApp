@@ -3,6 +3,7 @@ import "./AuthForm.css";
 import Api from "../../service/api";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import getTokenFromLS from "../utils/getTokenFromLS";
 
 // @ts-ignore
 const RegisterForm = (): any => {
@@ -14,15 +15,7 @@ const RegisterForm = (): any => {
     } = useForm({
         mode: "onBlur"
     });
-    const [_token, _setToken] = useState(() => {
-        let token = window.localStorage.getItem("token");
-
-        function changeToken(token: string): void {
-            window.localStorage.setItem("token", token)
-        }
-
-        return [token, changeToken];
-    });
+    const [_token, _setToken] = useState(getTokenFromLS);
     const [message, setMessage] = useState<String | undefined>(undefined);
     const navigate = useNavigate();
 

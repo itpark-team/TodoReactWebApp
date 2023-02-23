@@ -4,6 +4,7 @@ import Api from "../../service/api";
 import {useToken} from "../../store/store";
 import React, {Fragment, useEffect, useState} from "react";
 import {Link, redirect, useNavigate} from "react-router-dom";
+import getTokenFromLS from "../utils/getTokenFromLS";
 
 // @ts-ignore
 const AuthForm = (): any => {
@@ -15,15 +16,8 @@ const AuthForm = (): any => {
     } = useForm({
         mode: "onBlur"
     });
-    const [_token, _setToken] = useState(() => {
-        let token = window.localStorage.getItem("token");
 
-        function changeToken(token: string): void {
-            window.localStorage.setItem("token", token)
-        }
-
-        return [token, changeToken];
-    });
+    const [_token, _setToken] = useState(getTokenFromLS);
     const [message, setMessage] = useState<String | undefined>(undefined);
     const navigate = useNavigate();
 
