@@ -1,9 +1,8 @@
 import {useForm} from "react-hook-form";
 import "./AuthForm.css";
 import Api from "../../service/api";
-import {useToken} from "../../store/store";
-import React, {Fragment, useEffect, useState} from "react";
-import {Link, redirect, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import getTokenFromLS from "../utils/getTokenFromLS";
 
 // @ts-ignore
